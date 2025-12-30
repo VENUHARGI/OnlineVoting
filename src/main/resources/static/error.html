@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Error - Online Voting System</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/error.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  </head>
+  <body class="error-page">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-vote-yea"></i>
+          <span>Online Voting System</span>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-link" onclick="goHome()">
+            <i class="fas fa-home"></i>
+            Home
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="error-main">
+      <div class="error-container">
+        <!-- Error Icon -->
+        <div class="error-icon" id="errorIcon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+
+        <!-- Error Content -->
+        <div class="error-content">
+          <h1 class="error-title" id="errorTitle">Oops! Something went wrong</h1>
+          <p class="error-message" id="errorMessage">
+            We encountered an unexpected error while processing your request. Please try again or contact our support team if the problem persists.
+          </p>
+
+          <div class="error-code" id="errorCodeSection" style="display: none">
+            <label>Error Code:</label>
+            <span id="errorCode" class="error-code-value"></span>
+          </div>
+
+          <div class="error-timestamp">
+            <label>Time:</label>
+            <span id="timestamp"></span>
+          </div>
+        </div>
+
+        <!-- Common Error Types -->
+        <div class="error-types" id="errorTypes">
+          <!-- Network Error -->
+          <div class="error-type" id="networkError" style="display: none">
+            <div class="error-type-icon">
+              <i class="fas fa-wifi"></i>
+            </div>
+            <div class="error-type-content">
+              <h3>Network Connection Issue</h3>
+              <p>Please check your internet connection and try again.</p>
+              <ul class="error-suggestions">
+                <li>Verify your internet connection is stable</li>
+                <li>Try refreshing the page</li>
+                <li>Check if other websites are loading properly</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Server Error -->
+          <div class="error-type" id="serverError" style="display: none">
+            <div class="error-type-icon">
+              <i class="fas fa-server"></i>
+            </div>
+            <div class="error-type-content">
+              <h3>Server Temporarily Unavailable</h3>
+              <p>Our servers are experiencing high traffic or undergoing maintenance.</p>
+              <ul class="error-suggestions">
+                <li>Please wait a few minutes and try again</li>
+                <li>The service should be restored shortly</li>
+                <li>Contact support if the issue persists</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Authentication Error -->
+          <div class="error-type" id="authError" style="display: none">
+            <div class="error-type-icon">
+              <i class="fas fa-user-lock"></i>
+            </div>
+            <div class="error-type-content">
+              <h3>Authentication Required</h3>
+              <p>You need to be logged in to access this resource.</p>
+              <ul class="error-suggestions">
+                <li>Please sign in to your account</li>
+                <li>Verify your credentials are correct</li>
+                <li>Reset your password if needed</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Permission Error -->
+          <div class="error-type" id="permissionError" style="display: none">
+            <div class="error-type-icon">
+              <i class="fas fa-ban"></i>
+            </div>
+            <div class="error-type-content">
+              <h3>Access Denied</h3>
+              <p>You don't have permission to access this resource.</p>
+              <ul class="error-suggestions">
+                <li>Verify you're using the correct account</li>
+                <li>Contact an administrator for access</li>
+                <li>Check if your account has the required permissions</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Not Found Error -->
+          <div class="error-type" id="notFoundError" style="display: none">
+            <div class="error-type-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <div class="error-type-content">
+              <h3>Page Not Found</h3>
+              <p>The page you're looking for doesn't exist or has been moved.</p>
+              <ul class="error-suggestions">
+                <li>Check the URL for typos</li>
+                <li>Use the navigation menu to find what you need</li>
+                <li>Return to the home page and start over</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Validation Error -->
+          <div class="error-type" id="validationError" style="display: none">
+            <div class="error-type-icon">
+              <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="error-type-content">
+              <h3>Invalid Input</h3>
+              <p>The information provided is not valid or complete.</p>
+              <ul class="error-suggestions">
+                <li>Check all required fields are filled</li>
+                <li>Verify the format of your input</li>
+                <li>Follow the validation guidelines provided</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Session Expired -->
+          <div class="error-type" id="sessionError" style="display: none">
+            <div class="error-type-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="error-type-content">
+              <h3>Session Expired</h3>
+              <p>Your session has expired for security reasons.</p>
+              <ul class="error-suggestions">
+                <li>Please sign in again to continue</li>
+                <li>Make sure to save your work regularly</li>
+                <li>Enable "Remember Me" for longer sessions</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="error-actions">
+          <button class="btn btn-primary" onclick="tryAgain()" id="retryBtn">
+            <i class="fas fa-redo"></i>
+            Try Again
+          </button>
+          <button class="btn btn-secondary" onclick="goBack()" id="backBtn">
+            <i class="fas fa-arrow-left"></i>
+            Go Back
+          </button>
+          <button class="btn btn-outline" onclick="goHome()" id="homeBtn">
+            <i class="fas fa-home"></i>
+            Home Page
+          </button>
+          <button class="btn btn-link" onclick="contactSupport()" id="supportBtn">
+            <i class="fas fa-life-ring"></i>
+            Contact Support
+          </button>
+        </div>
+
+        <!-- Additional Help -->
+        <div class="error-help">
+          <div class="help-section">
+            <h3>Need Additional Help?</h3>
+            <div class="help-options">
+              <a href="#" class="help-link" onclick="showFAQ()">
+                <i class="fas fa-question-circle"></i>
+                View FAQ
+              </a>
+              <a href="#" class="help-link" onclick="reportIssue()">
+                <i class="fas fa-bug"></i>
+                Report Issue
+              </a>
+              <a href="#" class="help-link" onclick="liveChat()">
+                <i class="fas fa-comments"></i>
+                Live Chat
+              </a>
+            </div>
+          </div>
+
+          <div class="system-status">
+            <h4>System Status</h4>
+            <div class="status-indicators">
+              <div class="status-item">
+                <div class="status-indicator status-good"></div>
+                <span>Authentication Service</span>
+              </div>
+              <div class="status-item">
+                <div class="status-indicator status-good"></div>
+                <span>Voting Service</span>
+              </div>
+              <div class="status-item">
+                <div class="status-indicator status-good"></div>
+                <span>Database Service</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-content">
+        <p>&copy; 2024 Online Voting System. Your voice matters.</p>
+        <div class="footer-links">
+          <a href="#" class="link">Privacy Policy</a>
+          <a href="#" class="link">Terms of Service</a>
+          <a href="#" class="link">System Status</a>
+          <a href="#" class="link">Support</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Report Issue Modal -->
+    <div id="reportModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Report an Issue</h3>
+          <button class="modal-close" onclick="closeModal('reportModal')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="reportForm">
+            <div class="form-group">
+              <label for="issueType">Issue Type</label>
+              <select id="issueType" class="form-control">
+                <option value="technical">Technical Problem</option>
+                <option value="auth">Login/Authentication</option>
+                <option value="voting">Voting Process</option>
+                <option value="ui">User Interface</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="issueDescription">Description</label>
+              <textarea id="issueDescription" class="form-control" rows="4" placeholder="Please describe the issue you encountered..."></textarea>
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn btn-secondary" onclick="closeModal('reportModal')">Cancel</button>
+              <button type="submit" class="btn btn-primary">Submit Report</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/error.js"></script>
+  </body>
+</html>

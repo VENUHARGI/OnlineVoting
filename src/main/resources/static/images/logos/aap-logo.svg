@@ -1,0 +1,10 @@
+<!-- AAP Logo Placeholder -->
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" fill="#0EA5E9" rx="10"/>
+  <g transform="translate(15,25)">
+    <!-- Simplified broom symbol -->
+    <rect x="30" y="0" width="10" height="35" fill="#8B4513"/>
+    <path d="M20 35 L50 35 L50 45 L45 50 L25 50 Z" fill="#FFD700"/>
+  </g>
+  <text x="50" y="75" text-anchor="middle" fill="white" font-family="Arial" font-size="12" font-weight="bold">AAP</text>
+</svg>

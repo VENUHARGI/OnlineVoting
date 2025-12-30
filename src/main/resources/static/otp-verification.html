@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify Your Account - Online Voting System</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/forms.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  </head>
+  <body class="auth-page">
+    <div class="auth-container">
+      <div class="auth-header">
+        <div class="logo">
+          <i class="fas fa-shield-alt"></i>
+          <h1>Account Verification</h1>
+        </div>
+        <p class="tagline">Secure • Protected • Verified</p>
+      </div>
+
+      <div class="auth-form-container">
+        <div class="form-header">
+          <h2>Verify Your Account</h2>
+          <p id="otpInstructions">
+            A 6-digit verification code has been sent to your registered email address. Please enter it below to complete your registration.
+          </p>
+          <div class="email-display" id="emailDisplay"></div>
+        </div>
+
+        <form id="otpForm" class="auth-form otp-form">
+          <div class="otp-input-container">
+            <input type="text" class="otp-input" id="otp1" maxlength="1" autocomplete="off" />
+            <input type="text" class="otp-input" id="otp2" maxlength="1" autocomplete="off" />
+            <input type="text" class="otp-input" id="otp3" maxlength="1" autocomplete="off" />
+            <input type="text" class="otp-input" id="otp4" maxlength="1" autocomplete="off" />
+            <input type="text" class="otp-input" id="otp5" maxlength="1" autocomplete="off" />
+            <input type="text" class="otp-input" id="otp6" maxlength="1" autocomplete="off" />
+          </div>
+          <span class="error-message" id="otpError"></span>
+
+          <div class="otp-timer" id="otpTimer">
+            <p>Code expires in: <span id="countdown">10:00</span></p>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" id="verifyBtn">
+            <i class="fas fa-check-circle"></i>
+            Verify Account
+          </button>
+
+          <div class="resend-section">
+            <p class="resend-text">Didn't receive the code?</p>
+            <button type="button" class="btn btn-link" id="resendBtn" onclick="resendOTP()">
+              <i class="fas fa-redo"></i>
+              Resend Code
+            </button>
+            <div class="resend-cooldown hidden" id="resendCooldown">
+              <p>Please wait <span id="resendTimer">60</span> seconds before requesting a new code</p>
+            </div>
+          </div>
+        </form>
+
+        <!-- Test OTP Section -->
+        <div
+          class="test-otp-section"
+          id="testOTPSection"
+          style="margin-top: 20px; padding: 15px; background: #f0f4ff; border-radius: 8px; border-left: 4px solid #007bff"
+        >
+          <p style="margin: 0 0 10px 0; font-weight: 600; color: #333">🧪 Test Mode - Your OTP Code</p>
+          <div id="testOTPDisplay" style="padding: 15px; background: white; border-radius: 4px; border: 2px dashed #007bff">
+            <p style="margin: 0 0 12px 0; color: #666; font-size: 0.9em">Copy and paste this code to verify:</p>
+            <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between">
+              <code id="testOTPCode" style="font-size: 2em; font-weight: bold; color: #007bff; letter-spacing: 3px; flex: 1; text-align: center">------</code>
+              <button type="button" class="btn btn-sm" onclick="copyTestOTP()" style="padding: 8px 12px; font-size: 0.85em; white-space: nowrap">
+                <i class="fas fa-copy"></i>
+                Copy
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-links">
+          <a href="login.html" class="link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Login
+          </a>
+        </div>
+      </div>
+
+      <!-- Loading Overlay -->
+      <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p id="loadingMessage">Verifying your code...</p>
+      </div>
+
+      <!-- Success Modal -->
+      <div id="successModal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-icon success">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h3>Verification Successful!</h3>
+          <p id="successMessage">Your account has been verified successfully. You can now access your voting dashboard.</p>
+          <button class="btn btn-primary" onclick="redirectToDashboard()">Continue to Dashboard</button>
+        </div>
+      </div>
+
+      <!-- Error Modal -->
+      <div id="errorModal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-icon error">
+            <i class="fas fa-exclamation-circle"></i>
+          </div>
+          <h3>Verification Failed</h3>
+          <p id="errorMessage">Invalid or expired verification code. Please try again or request a new code.</p>
+          <button class="btn btn-secondary" onclick="closeModal('errorModal')">Try Again</button>
+        </div>
+      </div>
+
+      <!-- Code Expired Modal -->
+      <div id="expiredModal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-icon warning">
+            <i class="fas fa-clock"></i>
+          </div>
+          <h3>Code Expired</h3>
+          <p>Your verification code has expired. Please request a new one.</p>
+          <button class="btn btn-primary" onclick="resendOTPAndCloseModal()">Send New Code</button>
+        </div>
+      </div>
+
+      <!-- Resend Success Modal -->
+      <div id="resendSuccessModal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-icon success">
+            <i class="fas fa-paper-plane"></i>
+          </div>
+          <h3>New Code Sent!</h3>
+          <p>We've sent a new verification code to your email address. Please check your inbox.</p>
+          <button class="btn btn-primary" onclick="closeModal('resendSuccessModal')">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/otp-verification.js"></script>
+  </body>
+</html>

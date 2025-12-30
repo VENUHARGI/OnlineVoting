@@ -1,0 +1,89 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /voting
+
+spring:
+  application:
+    name: online-voting-system
+
+  # Database Configuration
+  datasource:
+    url: ${DB_URL:jdbc:oracle:thin:@mws-ora08-dev.dmzad.ds.ge-healthcare.net:1521:devmwsr5}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      pool-name: VotingSystemPool
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 600000
+      connection-test-query: SELECT 1 FROM DUAL
+      validation-timeout: 3000
+
+  # JPA Configuration - Schema managed offline
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: false
+        jdbc:
+          time_zone: UTC
+          batch_size: 20
+        temp:
+          use_jdbc_metadata_defaults: false
+        transaction:
+          jta:
+            platform: none # Disable JTA platform to prevent hanging
+
+# OTP Configuration
+otp:
+  expiration-minutes: 10
+  max-attempts: 3
+  resend-cooldown-minutes: 2
+
+# Rate Limiting Configuration
+rate-limit:
+  otp:
+    requests-per-hour: 3
+    requests-per-day: 10
+  login:
+    requests-per-minute: 5
+    lockout-duration-minutes: 15
+
+# Application Configuration
+voting:
+  session:
+    timeout-minutes: 30
+  email:
+    from: ${EMAIL_FROM:noreply@votingsystem.com}
+    from-name: ${EMAIL_FROM_NAME:Online Voting System}
+  security:
+    password-min-length: 8
+    account-lockout-attempts: 5
+    account-lockout-duration-minutes: 30
+
+# Logging Configuration
+logging:
+  level:
+    com.voting.system: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO
+    org.springframework.orm.jpa: INFO
+    org.springframework.transaction: INFO
+    org.eclipse.angus.mail: WARN
+    jakarta.mail: WARN
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n"
+  file:
+    name: logs/voting-system.log

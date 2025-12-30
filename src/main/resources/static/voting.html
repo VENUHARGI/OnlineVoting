@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cast Your Vote - Online Voting System</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/voting.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  </head>
+  <body class="voting-page">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-vote-yea"></i>
+          <span>Online Voting System</span>
+        </div>
+        <div class="user-info">
+          <span class="welcome-text">Welcome, <span id="userName">Voter</span></span>
+          <button class="btn btn-link logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="voting-main">
+      <div class="voting-container">
+        <!-- Voting Steps Indicator -->
+        <div class="steps-indicator">
+          <div class="step active" id="step1">
+            <div class="step-number">1</div>
+            <div class="step-label">Select Constituency</div>
+          </div>
+          <div class="step" id="step2">
+            <div class="step-number">2</div>
+            <div class="step-label">Choose Candidate</div>
+          </div>
+          <div class="step" id="step3">
+            <div class="step-number">3</div>
+            <div class="step-label">Confirm Vote</div>
+          </div>
+        </div>
+
+        <!-- Step 1: Constituency Selection -->
+        <div class="voting-step" id="constituencyStep">
+          <div class="step-header">
+            <h2><i class="fas fa-map-marker-alt"></i> Select Your Constituency</h2>
+            <p>Choose your voting constituency from the list below</p>
+          </div>
+
+          <div class="constituency-search">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="constituencySearch" placeholder="Search constituencies..." onkeyup="filterConstituencies()" />
+            </div>
+          </div>
+
+          <div class="constituency-list" id="constituencyList">
+            <div class="loading-placeholder">
+              <div class="spinner"></div>
+              <p>Loading constituencies...</p>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn btn-primary" id="nextToPartiesBtn" onclick="goToParties()" disabled>
+              <i class="fas fa-arrow-right"></i>
+              Continue to Candidates
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Party/Candidate Selection -->
+        <div class="voting-step hidden" id="partiesStep">
+          <div class="step-header">
+            <h2><i class="fas fa-users"></i> Choose Your Candidate</h2>
+            <p>Select the candidate you want to vote for in <span id="selectedConstituencyName" class="highlight"></span></p>
+          </div>
+
+          <div class="constituency-info">
+            <div class="info-card">
+              <i class="fas fa-info-circle"></i>
+              <div>
+                <strong>Voting Constituency:</strong>
+                <span id="constituencyDisplay"></span>
+              </div>
+            </div>
+            <button class="btn btn-link change-constituency" onclick="changeConstituency()">
+              <i class="fas fa-edit"></i>
+              Change Constituency
+            </button>
+          </div>
+
+          <div class="candidates-search">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="candidatesSearch" placeholder="Search candidates or parties..." onkeyup="filterCandidates()" />
+            </div>
+          </div>
+
+          <div class="candidates-list" id="candidatesList">
+            <div class="loading-placeholder">
+              <div class="spinner"></div>
+              <p>Loading candidates...</p>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn btn-secondary" onclick="goBackToConstituencies()">
+              <i class="fas fa-arrow-left"></i>
+              Back
+            </button>
+            <button class="btn btn-primary" id="nextToConfirmBtn" onclick="goToConfirmation()" disabled>
+              <i class="fas fa-check"></i>
+              Confirm Selection
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Vote Confirmation -->
+        <div class="voting-step hidden" id="confirmationStep">
+          <div class="step-header">
+            <h2><i class="fas fa-check-circle"></i> Confirm Your Vote</h2>
+            <p>Please review your selection carefully before submitting your vote</p>
+          </div>
+
+          <div class="vote-summary">
+            <div class="summary-card">
+              <div class="summary-header">
+                <i class="fas fa-ballot-check"></i>
+                <h3>Your Vote Summary</h3>
+              </div>
+              <div class="summary-content">
+                <div class="summary-item">
+                  <label>Constituency:</label>
+                  <span id="confirmConstituency"></span>
+                </div>
+                <div class="summary-item">
+                  <label>Selected Candidate:</label>
+                  <span id="confirmCandidate"></span>
+                </div>
+                <div class="summary-item">
+                  <label>Party:</label>
+                  <span id="confirmParty"></span>
+                </div>
+                <div class="summary-item">
+                  <label>Voting Time:</label>
+                  <span id="votingTime"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="warning-notice">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div><strong>Important:</strong> Once you submit your vote, it cannot be changed. Please ensure your selection is correct before proceeding.</div>
+            </div>
+          </div>
+
+          <div class="confirmation-checkbox">
+            <label class="checkbox-label">
+              <input type="checkbox" id="confirmVote" onchange="toggleSubmitButton()" />
+              I confirm that this is my final vote selection and I understand that it cannot be changed after submission.
+            </label>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn btn-secondary" onclick="goBackToParties()">
+              <i class="fas fa-arrow-left"></i>
+              Back to Edit
+            </button>
+            <button class="btn btn-success" id="submitVoteBtn" onclick="submitVote()" disabled>
+              <i class="fas fa-paper-plane"></i>
+              Submit My Vote
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+      <div class="spinner large"></div>
+      <p id="loadingMessage">Processing your vote...</p>
+    </div>
+
+    <!-- Vote Success Modal -->
+    <div id="successModal" class="modal hidden">
+      <div class="modal-content large">
+        <div class="modal-icon success large">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h3>Vote Cast Successfully!</h3>
+        <div class="vote-receipt">
+          <h4>Vote Receipt</h4>
+          <div class="receipt-content">
+            <div class="receipt-item">
+              <label>Transaction ID:</label>
+              <span id="transactionId" class="monospace"></span>
+            </div>
+            <div class="receipt-item">
+              <label>Timestamp:</label>
+              <span id="voteTimestamp"></span>
+            </div>
+            <div class="receipt-item">
+              <label>Constituency:</label>
+              <span id="receiptConstituency"></span>
+            </div>
+            <div class="receipt-item">
+              <label>Candidate:</label>
+              <span id="receiptCandidate"></span>
+            </div>
+          </div>
+        </div>
+        <p class="success-message">Thank you for participating in the democratic process. Your vote has been securely recorded.</p>
+        <button class="btn btn-primary" onclick="redirectToSuccess()">View Confirmation</button>
+      </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="errorModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-icon error">
+          <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <h3>Vote Submission Failed</h3>
+        <p id="errorMessage">An error occurred while submitting your vote. Please try again.</p>
+        <button class="btn btn-secondary" onclick="closeModal('errorModal')">Try Again</button>
+      </div>
+    </div>
+
+    <!-- Already Voted Modal -->
+    <div id="alreadyVotedModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-icon warning">
+          <i class="fas fa-vote-yea"></i>
+        </div>
+        <h3>You Have Already Voted</h3>
+        <p>Our records show that you have already cast your vote in this election. Each voter is allowed only one vote.</p>
+        <button class="btn btn-primary" onclick="redirectToSuccess()">View My Vote Status</button>
+      </div>
+    </div>
+
+    <!-- Voting Closed Modal -->
+    <div id="votingClosedModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-icon info">
+          <i class="fas fa-clock"></i>
+        </div>
+        <h3>Voting Period Closed</h3>
+        <p>The voting period for this election has ended. Thank you for your interest in participating.</p>
+        <button class="btn btn-secondary" onclick="redirectToHome()">Return to Home</button>
+      </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/voting.js"></script>
+  </body>
+</html>

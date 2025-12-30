@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vote Confirmed - Online Voting System</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/success.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  </head>
+  <body class="success-page">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-vote-yea"></i>
+          <span>Online Voting System</span>
+        </div>
+        <div class="user-info">
+          <span class="welcome-text">Welcome, <span id="userName">Voter</span></span>
+          <button class="btn btn-link logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="success-main">
+      <div class="success-container">
+        <!-- Success Animation -->
+        <div class="success-animation">
+          <div class="checkmark-circle">
+            <div class="checkmark"></div>
+          </div>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-content">
+          <h1 class="success-title">Vote Cast Successfully!</h1>
+          <p class="success-subtitle">Thank you for participating in the democratic process</p>
+
+          <!-- Vote Receipt -->
+          <div class="vote-receipt-card">
+            <div class="receipt-header">
+              <i class="fas fa-receipt"></i>
+              <h2>Your Vote Receipt</h2>
+            </div>
+            <div class="receipt-body">
+              <div class="receipt-item">
+                <label>Transaction ID:</label>
+                <span class="receipt-value monospace" id="transactionId">Loading...</span>
+                <button class="btn btn-icon" onclick="copyTransactionId()" title="Copy Transaction ID">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
+              <div class="receipt-item">
+                <label>Voter ID:</label>
+                <span class="receipt-value" id="voterId">Loading...</span>
+              </div>
+              <div class="receipt-item">
+                <label>Constituency:</label>
+                <span class="receipt-value" id="constituency">Loading...</span>
+              </div>
+              <div class="receipt-item">
+                <label>Selected Party:</label>
+                <span class="receipt-value" id="selectedParty">Loading...</span>
+              </div>
+              <div class="receipt-item">
+                <label>Candidate Name:</label>
+                <span class="receipt-value" id="candidateName">Loading...</span>
+              </div>
+              <div class="receipt-item">
+                <label>Vote Cast Time:</label>
+                <span class="receipt-value" id="voteTimestamp">Loading...</span>
+              </div>
+              <div class="receipt-item">
+                <label>Status:</label>
+                <span class="receipt-value status-confirmed">
+                  <i class="fas fa-check-circle"></i>
+                  Confirmed & Recorded
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Important Information -->
+          <div class="info-cards">
+            <div class="info-card security">
+              <div class="info-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="info-content">
+                <h3>Secure & Anonymous</h3>
+                <p>Your vote has been encrypted and securely stored. Your privacy is fully protected.</p>
+              </div>
+            </div>
+            <div class="info-card verification">
+              <div class="info-icon">
+                <i class="fas fa-certificate"></i>
+              </div>
+              <div class="info-content">
+                <h3>Verified & Counted</h3>
+                <p>Your vote has been verified and will be included in the final election results.</p>
+              </div>
+            </div>
+            <div class="info-card immutable">
+              <div class="info-icon">
+                <i class="fas fa-lock"></i>
+              </div>
+              <div class="info-content">
+                <h3>Final & Immutable</h3>
+                <p>Your vote cannot be changed or deleted. It is permanently recorded in our secure system.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vote Status Check -->
+          <div class="vote-status-section">
+            <h3>Vote Status</h3>
+            <div class="status-timeline">
+              <div class="timeline-item completed">
+                <div class="timeline-icon">
+                  <i class="fas fa-user-check"></i>
+                </div>
+                <div class="timeline-content">
+                  <h4>Identity Verified</h4>
+                  <p>Your identity was confirmed through secure authentication</p>
+                </div>
+              </div>
+              <div class="timeline-item completed">
+                <div class="timeline-icon">
+                  <i class="fas fa-vote-yea"></i>
+                </div>
+                <div class="timeline-content">
+                  <h4>Vote Cast</h4>
+                  <p>Your vote selection was recorded successfully</p>
+                </div>
+              </div>
+              <div class="timeline-item completed">
+                <div class="timeline-icon">
+                  <i class="fas fa-database"></i>
+                </div>
+                <div class="timeline-content">
+                  <h4>Securely Stored</h4>
+                  <p>Your vote is encrypted and stored in our secure database</p>
+                </div>
+              </div>
+              <div class="timeline-item pending">
+                <div class="timeline-icon">
+                  <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="timeline-content">
+                  <h4>Results Compilation</h4>
+                  <p>Will be included in final election results</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Information -->
+          <div class="additional-info">
+            <div class="info-grid">
+              <div class="info-item">
+                <i class="fas fa-calendar-alt"></i>
+                <div>
+                  <strong>Election Period</strong>
+                  <p id="electionPeriod">Loading...</p>
+                </div>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-users"></i>
+                <div>
+                  <strong>Total Registered Voters</strong>
+                  <p id="totalVoters">Loading...</p>
+                </div>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-chart-line"></i>
+                <div>
+                  <strong>Turnout So Far</strong>
+                  <p id="turnoutPercentage">Loading...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="btn btn-primary" onclick="downloadReceipt()">
+              <i class="fas fa-download"></i>
+              Download Receipt
+            </button>
+            <button class="btn btn-outline" onclick="shareSuccess()">
+              <i class="fas fa-share-alt"></i>
+              Share
+            </button>
+          </div>
+
+          <!-- Important Notice -->
+          <div class="important-notice">
+            <div class="notice-icon">
+              <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="notice-content">
+              <h4>Important Reminder</h4>
+              <p>
+                Please save your transaction ID (<span class="highlight" id="transactionIdCopy"></span>) for your records. You may be asked to provide it if you
+                need to verify your vote status.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-content">
+        <p>&copy; 2024 Online Voting System. Secure, Transparent, Democratic.</p>
+        <div class="footer-links">
+          <a href="#" class="link">Privacy Policy</a>
+          <a href="#" class="link">Terms of Service</a>
+          <a href="#" class="link">Contact Support</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Copy Success Toast -->
+    <div id="copyToast" class="toast hidden">
+      <i class="fas fa-check"></i>
+      Transaction ID copied to clipboard!
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Share Your Participation</h3>
+          <button class="modal-close" onclick="closeModal('shareModal')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Encourage others to participate in democracy!</p>
+          <div class="share-buttons">
+            <button class="btn btn-social twitter" onclick="shareOnTwitter()">
+              <i class="fab fa-twitter"></i>
+              Twitter
+            </button>
+            <button class="btn btn-social facebook" onclick="shareOnFacebook()">
+              <i class="fab fa-facebook"></i>
+              Facebook
+            </button>
+            <button class="btn btn-social whatsapp" onclick="shareOnWhatsApp()">
+              <i class="fab fa-whatsapp"></i>
+              WhatsApp
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/success.js"></script>
+  </body>
+</html>

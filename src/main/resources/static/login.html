@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Online Voting System</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/forms.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  </head>
+  <body class="auth-page">
+    <div class="auth-container">
+      <div class="auth-header">
+        <div class="logo">
+          <i class="fas fa-vote-yea"></i>
+          <h1>Online Voting System</h1>
+        </div>
+        <p class="tagline">Welcome Back! Ready to Vote?</p>
+      </div>
+
+      <div class="auth-form-container">
+        <div class="form-header">
+          <h2>Sign In to Your Account</h2>
+          <p>Access your secure voting dashboard</p>
+        </div>
+
+        <form id="loginForm" class="auth-form">
+          <div class="form-group">
+            <label for="email">
+              <i class="fas fa-envelope"></i>
+              Email Address
+            </label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email address" />
+            <span class="error-message" id="emailError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="password">
+              <i class="fas fa-lock"></i>
+              Password
+            </label>
+            <div class="password-input-container">
+              <input type="password" id="password" name="password" required placeholder="Enter your password" />
+              <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                <i class="fas fa-eye" id="passwordToggleIcon"></i>
+              </button>
+            </div>
+            <span class="error-message" id="passwordError"></span>
+          </div>
+
+          <div class="form-options">
+            <label class="checkbox-label">
+              <input type="checkbox" id="rememberMe" name="rememberMe" />
+              Remember me
+            </label>
+            <a href="#" class="link forgot-password" onclick="showForgotPassword()"> Forgot password? </a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
+            <i class="fas fa-sign-in-alt"></i>
+            Sign In
+          </button>
+        </form>
+
+        <!-- Forgot Password Form -->
+        <form id="forgotPasswordForm" class="auth-form hidden">
+          <div class="form-header">
+            <h3>Reset Your Password</h3>
+            <p>Enter your email to receive a reset code</p>
+          </div>
+
+          <div class="form-group">
+            <label for="resetEmail">
+              <i class="fas fa-envelope"></i>
+              Email Address
+            </label>
+            <input type="email" id="resetEmail" name="resetEmail" required placeholder="Enter your email address" />
+            <span class="error-message" id="resetEmailError"></span>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="showLoginForm()">Back to Login</button>
+            <button type="submit" class="btn btn-primary">Send Reset Code</button>
+          </div>
+        </form>
+
+        <div class="auth-links">
+          <p>Don't have an account? <a href="signup.html" class="link">Create account</a></p>
+        </div>
+      </div>
+
+      <!-- Loading Overlay -->
+      <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p id="loadingMessage">Signing you in...</p>
+      </div>
+
+      <!-- OTP Required Modal -->
+      <div id="otpRequiredModal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-icon info">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Verification Required</h3>
+          <p>For your security, we've sent a verification code to your email address. Please verify to continue.</p>
+          <button class="btn btn-primary" onclick="redirectToOTPVerification()">Enter Verification Code</button>
+        </div>
+      </div>
+
+      <!-- Password Reset Success Modal -->
+      <div id="resetSuccessModal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-icon success">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h3>Reset Code Sent!</h3>
+          <p>We've sent a password reset code to your email address. Check your inbox and follow the instructions.</p>
+          <button class="btn btn-primary" onclick="closeModal('resetSuccessModal')">OK</button>
+        </div>
+      </div>
+
+      <!-- Error Modal -->
+      <div id="errorModal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-icon error">
+            <i class="fas fa-exclamation-circle"></i>
+          </div>
+          <h3>Login Failed</h3>
+          <p id="errorMessage">Invalid email or password. Please try again.</p>
+          <button class="btn btn-secondary" onclick="closeModal('errorModal')">Try Again</button>
+        </div>
+      </div>
+
+      <!-- Account Locked Modal -->
+      <div id="lockedModal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-icon warning">
+            <i class="fas fa-lock"></i>
+          </div>
+          <h3>Account Temporarily Locked</h3>
+          <p>Your account has been temporarily locked due to multiple failed login attempts. Please try again later or contact support.</p>
+          <button class="btn btn-secondary" onclick="closeModal('lockedModal')">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/login.js"></script>
+  </body>
+</html>
